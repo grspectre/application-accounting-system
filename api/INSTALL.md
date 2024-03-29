@@ -6,3 +6,7 @@
 4. Устанавливаем нужное. Последовательно выполняем следующие команды: `pip install fastapi`, `pip install "uvicorn[standard]"`, `pip install SQLAlchemy`. Можно снова проверить с помощью pip freeze, которая должна показать список установленных модулей.
 5. Запускаем локальный сервер с помощью команды `uvicorn main:app --reload`.
 
+## Обновления от 29.03.2024
+
+- Добавлено немного фронтенда. Подключены через CDN [TailwindCSS](https://tailwindcss.com/) и [AlpineJS](https://alpinejs.dev/start-here). Некоторые решения по вёрстке можно найти на [flowbite.com](https://flowbite.com/docs/getting-started/introduction/). Какой-то концепции нет, будем считать это отправной точкой.
+- Добавлен run.bat, работать он будет, если виртуальное окружение создать в папке venv.
