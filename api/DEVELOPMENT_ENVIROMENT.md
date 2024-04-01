@@ -25,6 +25,23 @@ sudo ln -s /etc/nginx/sites-available/pir01
 
 Обязательно нужно изменить наименование upstream в виртуальном хосте nginx.
 
+## Подключаем базу данных.
+
+Предполагается, что мы находимся в каталоге `./api`. БД с номерами `pir_01 - pir_04` уже созданы, доступы:
+
+```
+user: accounting
+pwd: accounting
+```
+
+```
+source venv/bin/activate
+pip install alembic psycopg2-binary # если в venv/bin/ не появился файл alembic - копируем его с прода
+cp alembic.ini.template alembic.ini # правим путь к базе
+cp env.template .env # правим наименование БД
+alembic upgrade 536366596e20 # мигрируем БД
+```
+
 ## Workflow тестирования
 
 1. Заливаем изменения в github в свою ветку
