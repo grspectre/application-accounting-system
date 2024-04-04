@@ -1,5 +1,3 @@
-from dotenv import dotenv_values
+from packages.common.yandex_id import get_access_token
 
-config = dotenv_values('.env')
-print(config)
-print(config.get('POSTGRES_USER', 'postgres'))
+get_access_token('9839231')
