@@ -16,7 +16,7 @@ sudo cp ./sysconfigs/supervisor.conf /etc/supervisor/conf.d/pir01.conf
 sudo nano /etc/supervisor/conf.d/pir01.conf
 python3 -m venv venv --clear
 source venv/bin/activate
-pip install SQLAlchemy fastapi gunicorn "uvicorn[standard]"
+pip install SQLAlchemy fastapi gunicorn "uvicorn[standard] alembic requests psycopg2-binary"
 cd /etc/nginx/sites-enabled/
 sudo ln -s /etc/nginx/sites-available/pir01
 ```
