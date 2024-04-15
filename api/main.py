@@ -1,13 +1,13 @@
 import urllib.parse
 
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
-from database import models, schemas
+from database import models, schemas, crud
 from database.database import SessionLocal, engine
-from packages.common.yandex_id import get_access_token
+from packages.common.yandex_id import get_access_token, get_user_info
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -24,18 +24,21 @@ def get_db():
 app = FastAPI()
 
 
-# @app.middleware("http")
-# async def check_token(request: Request, call_next):
-#     return await call_next(request)
-#     print('/api' not in request.url)
-#     if '/api' not in request.url:
-#         return await call_next(request)
-#     auth_header = request.headers.get('Authorization')
-#     print(auth_header)
-#     if auth_header is None:
-#         print("we are here")
-#         return JSONResponse({"error": "Authorization token not found"}, status_code=401)
-#     return await call_next(request)
+@app.middleware("http")
+async def check_token(request: Request, call_next):
+    if '/api' not in str(request.url):
+        return await call_next(request)
+    auth_header = request.headers.get('Authorization')
+    if auth_header is None:
+        return JSONResponse({"error": "Authorization token not found"}, status_code=401)
+    db = next(get_db())
+    user = crud.get_user(db, auth_header)
+    if user is None:
+        _, token = auth_header.split(' ')
+        print(token)
+        yandex_user_info = get_user_info(token)
+        print(yandex_user_info)
+    return await call_next(request)
 
 
 @app.get("/api/user")
