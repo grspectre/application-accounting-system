@@ -19,7 +19,7 @@ def get_db():
         db.close()
 
 db = next(get_db())
-token = 'y0_AgAEA7qkc6tpAAuODgAAAAEA0JD9AACtRvYJwe1MEo9Hg_s5i7GdCRmt6w'
+token = ''
 
 user = crud.get_user(db, user_token=token)
 user.get_schemas().get_info()
