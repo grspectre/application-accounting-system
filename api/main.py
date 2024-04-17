@@ -26,24 +26,41 @@ app = FastAPI()
 
 @app.middleware("http")
 async def check_token(request: Request, call_next):
-    if '/api' not in str(request.url):
+    if '/api' not in str(request.url) or '/api/ping' in str(request.url):
         return await call_next(request)
     auth_header = request.headers.get('Authorization')
+    error_json = {"error": "Authorization token not found"}
     if auth_header is None:
-        return JSONResponse({"error": "Authorization token not found"}, status_code=401)
+        return JSONResponse(error_json, status_code=401)
     db = next(get_db())
-    user = crud.get_user(db, auth_header)
+    _, token = auth_header.split(' ')
+    user = crud.get_user(db, user_token=token)
     if user is None:
-        _, token = auth_header.split(' ')
-        print(token)
         yandex_user_info = get_user_info(token)
-        print(yandex_user_info)
+        if 'default_email' not in yandex_user_info:
+            return JSONResponse(error_json, status_code=401)
+        email = yandex_user_info['default_email']
+        name = yandex_user_info['display_name']
+        user = crud.get_user(db, email=email)
+        if user is None:
+            user_schema = schemas.UserCreate(
+                name=name, email=email, password=token, context=yandex_user_info
+            )
+            user = crud.create_user(db, user_schema)
     return await call_next(request)
 
 
 @app.get("/api/user")
-async def api_user():
-    return {"success": True, "message": "Hello World"}
+async def api_user(request: Request, db: Session = Depends(get_db)):
+    auth_header = request.headers.get('Authorization')
+    _, token = auth_header.split(' ')
+    user = crud.get_user(db, user_token=token)
+    return {
+        "success": True,
+        "data": {
+            user.get_schemas().get_info()
+        }
+    }
 
 
 @app.get("/api/ping")

@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import JSONB, TIMESTAMP
 from sqlalchemy.orm import relationship
 import datetime
 from .database import Base
+from .schemas import User as UserSchema
 
 
 class User(Base):
@@ -19,3 +20,7 @@ class User(Base):
     created_at = Column(TIMESTAMP, default=datetime.datetime.now)
     updated_at = Column(TIMESTAMP, onupdate=datetime.datetime.now)
     deleted_at = Column(TIMESTAMP, nullable=True)
+
+    def get_schemas(self):
+        data = self.__dict__
+        return UserSchema(**data)

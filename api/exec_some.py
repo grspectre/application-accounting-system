@@ -11,4 +11,15 @@ from packages.common.yandex_id import get_access_token, get_user_info
 
 models.Base.metadata.create_all(bind=engine)
 
-print(get_user_info('y0_AgAEA7qkc6tpAAuODgAAAAEA0JD9AACtRvYJwe1MEo9Hg_s5i7GdCRmt6w'))
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+db = next(get_db())
+token = 'y0_AgAEA7qkc6tpAAuODgAAAAEA0JD9AACtRvYJwe1MEo9Hg_s5i7GdCRmt6w'
+
+user = crud.get_user(db, user_token=token)
+user.get_schemas().get_info()
