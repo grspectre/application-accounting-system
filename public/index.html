@@ -7,6 +7,9 @@
     <title>Application Accounting Service</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="/css/app.css">
     <link rel="icon" href="/img/fav/favicon.ico" type="image/x-icon">
   </head>
@@ -37,13 +40,20 @@
       <!-- main block -->
       <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 dark:text-gray-400">
         <main role="main" class="w-full h-full flex-grow p-3 overflow-auto">
-             <div>
-                <h1 class="text-2xl">Welcome to Application Accounting Service</h1>  
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus aliquid ut omnis amet explicabo quaerat facere? Officiis voluptas ducimus accusantium.</p>
-                <p>Est doloremque dignissimos nostrum quaerat sit deserunt, quas aspernatur voluptatum blanditiis eos sunt rerum expedita nulla a veritatis optio unde.</p>
-                <p>Eius facere tempora expedita odit praesentium accusantium! Aut voluptatem porro ut, odit hic incidunt repudiandae deleniti libero possimus voluptas aliquid.</p>
-                <p>Soluta architecto ipsa vero esse laboriosam! Aspernatur, natus, qui inventore autem, eius maiores ut molestias facilis asperiores rerum quidem est?</p>
-             </div>
+          <div>
+            <h1 class="text-2xl">Welcome to Application Accounting Service</h1>
+            <div x-data="auth_block">
+              <template x-if="authorized && userData">
+                <div>
+                  Добро пожаловать, <span x-text="userData.display_name"></span>.
+                  <a href="#" @click.prevent="logout()">выйти</a>
+                </div>
+              </template>
+              <template x-if="!authorized">
+                <a id="yandex-oauth" :href="baseUrl">Токен от Яндекса!</a>
+              </template>
+            </div>
+          </div>
         </main>
       </div>
 
