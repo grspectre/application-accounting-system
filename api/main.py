@@ -57,9 +57,7 @@ async def api_user(request: Request, db: Session = Depends(get_db)):
     user = crud.get_user(db, user_token=token)
     return {
         "success": True,
-        "data": {
-            user.get_schemas().get_info()
-        }
+        "data": user.get_schemas().get_info()
     }
 
 
