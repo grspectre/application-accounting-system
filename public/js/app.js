@@ -86,7 +86,7 @@ document.addEventListener('alpine:init', () => {
         async init() {
             let accessToken = await Util.getAccessToken();
             if (accessToken === null) { // we don't have access_token
-                let url = 'http://pir.dfmb.ru/api/verify/yandex';
+                let url = 'https://pir.dfmb.ru/api/verify/yandex';
                 let clientId = '0d90fed9dc3346b188a9d2e95c85a4cb'
                 this.baseUrl = 'https://oauth.yandex.ru/authorize?response_type=code&redirect_uri=' + url + '&client_id=' + clientId;
                 this.authorized = false;
