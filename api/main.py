@@ -26,8 +26,12 @@ app = FastAPI()
 
 @app.middleware("http")
 async def check_token(request: Request, call_next):
-    if '/api' not in str(request.url) or '/api/ping' in str(request.url):
+    if '/api' not in str(request.url):
         return await call_next(request)
+    exclude = ['/api/ping', '/api/verify/yandex']
+    for exclude_path in exclude:
+        if exclude_path in str(request.url):
+            return await call_next(request)
     auth_header = request.headers.get('Authorization')
     error_json = {"error": "Authorization token not found"}
     if auth_header is None:
