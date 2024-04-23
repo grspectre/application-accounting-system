@@ -26,9 +26,9 @@ window.Util = {
         };
 
         if (this.isUndefined(userToken)) {
-            window.db.keyValue.put(obj);
+            await window.db.keyValue.put(obj);
         } else {
-            window.db.keyValue.put(obj, userToken.id);
+            await window.db.keyValue.put(obj, userToken.id);
         }
 
         params.delete('refresh_token');
@@ -48,9 +48,9 @@ window.Util = {
         };
 
         if (this.isUndefined(userData)) {
-            window.db.keyValue.put(obj);
+            await window.db.keyValue.put(obj);
         } else {
-            window.db.keyValue.put(obj, userData.id);
+            await window.db.keyValue.put(obj, userData.id);
         }
     },
     getAccessToken: async function() {
