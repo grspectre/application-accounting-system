@@ -4,6 +4,22 @@ from pydantic import BaseModel
 from typing import List, Dict, Optional
 
 
+class Order(BaseModel):
+    id: int
+    customer_id: int
+    employee_id: int
+    order_type: str
+    order_text: str
+    order_status: str
+    context: Dict
+    created_at: datetime.datetime
+    updated_at: Optional[datetime.datetime]
+    deleted_at: Optional[datetime.datetime]
+
+    class Config:
+        from_attributes = True
+
+
 class UserBase(BaseModel):
     email: str
 
@@ -41,6 +57,8 @@ class User(UserBase):
     created_at: datetime.datetime
     updated_at: Optional[datetime.datetime]
     deleted_at: Optional[datetime.datetime]
+    customer_orders: list[Order] = []
+    employee_orders: list[Order] = []
 
     class Config:
         from_attributes = True
