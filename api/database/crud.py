@@ -1,3 +1,4 @@
+import uuid
 from typing import Optional
 from sqlalchemy.orm import Session
 
@@ -26,3 +27,17 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def create_order(db: Session, order: schemas.OrderCreate):
+    db_order = models.Order(
+        customer_id=order.customer_id,
+        order_type=order.order_type,
+        order_text=order.order_text,
+        order_status=order.order_status,
+        context={"uuid": str(uuid.uuid4())}
+    )
+    db.add(db_order)
+    db.commit()
+    db.refresh(db_order)
+    return db_order

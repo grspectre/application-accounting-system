@@ -1,16 +1,46 @@
 import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 from typing import List, Dict, Optional
 
 
-class Order(BaseModel):
+class BaseOrder(BaseModel):
+    order_type: str = Field(default=None, description="Order type")
+    order_status: str = Field(default="new", description="Order status")
+
+    @field_validator("order_status")
+    @classmethod
+    def order_status_validator(cls, v: str) -> str:
+        # FIXME не самое лучшее место, но пока так
+        statuses = ["new", "processed", "in_progress", "declined"] 
+        if v not in statuses:
+            raise ValueError("Status '{}' unavailable. Available statuses: {}".format(v, ", ".join(statuses)))
+        return v
+
+    @field_validator("order_type")
+    @classmethod
+    def order_type_validator(cls, v: str) -> str:
+        # FIXME не самое лучшее место, но пока так
+        # Тут я понял, что не понимаю это поле.
+        types = ["call", "chat", "visit"]
+        if v not in types:
+            raise ValueError("Status '{}' unavailable. Available types: {}".format(v, ", ".join(types)))
+        return v
+
+
+class OrderPost(BaseOrder):
+    order_text: str = Field(default=None, description="Order text", max_length=1024)
+
+
+class OrderCreate(OrderPost):
+    customer_id: int
+
+
+class Order(BaseOrder):
     id: int
     customer_id: int
-    employee_id: int
-    order_type: str
+    employee_id: Optional[int]
     order_text: str
-    order_status: str
     context: Dict
     created_at: datetime.datetime
     updated_at: Optional[datetime.datetime]
