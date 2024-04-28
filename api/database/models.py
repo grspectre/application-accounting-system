@@ -17,11 +17,8 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_company = Column(Boolean, default=False)
     created_at = Column(TIMESTAMP, default=datetime.datetime.now)
-    updated_at = Column(TIMESTAMP, onupdate=datetime.datetime.now)
+    updated_at = Column(TIMESTAMP, default=datetime.datetime.now, onupdate=datetime.datetime.now)
     deleted_at = Column(TIMESTAMP, nullable=True)
-
-    customer_orders = relationship("Order", back_populates="customer")
-    employee_orders = relationship("Order", back_populates="employee")
 
     def get_schemas(self):
         data = self.__dict__
@@ -38,12 +35,13 @@ class Order(Base):
     order_status = Column(String(50), index=True)
     context = Column(JSONB, default=[])
     created_at = Column(TIMESTAMP, default=datetime.datetime.now)
-    updated_at = Column(TIMESTAMP, onupdate=datetime.datetime.now)
+    updated_at = Column(TIMESTAMP, default=datetime.datetime.now, onupdate=datetime.datetime.now)
     deleted_at = Column(TIMESTAMP, nullable=True)
 
-    customer = relationship("User", foreign_keys=[customer_id], back_populates="customer_orders")
-    employee = relationship("User", foreign_keys=[employee_id], back_populates="employee_orders")
+    customer = relationship("User", foreign_keys=[customer_id])
+    employee = relationship("User", foreign_keys=[employee_id])
 
     def get_schemas(self):
         data = self.__dict__
-        return UserSchema(**data)
+        return []
+#        return OrderSchema(**data)

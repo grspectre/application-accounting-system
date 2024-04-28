@@ -1,9 +1,11 @@
 import urllib.parse
 
+from typing import Optional
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import RedirectResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
+from pydantic import ValidationError
 
 from database import models, schemas, crud
 from database.database import SessionLocal, engine
@@ -22,6 +24,12 @@ def get_db():
 
 
 app = FastAPI()
+
+
+def get_user_from_token(request: Request, db: Session = Depends(get_db)) -> Optional[models.User]:
+    auth_header = request.headers.get('Authorization')
+    _, token = auth_header.split(' ')
+    return crud.get_user(db, user_token=token)
 
 
 @app.middleware("http")
@@ -56,12 +64,33 @@ async def check_token(request: Request, call_next):
 
 @app.get("/api/user")
 async def api_user(request: Request, db: Session = Depends(get_db)):
-    auth_header = request.headers.get('Authorization')
-    _, token = auth_header.split(' ')
-    user = crud.get_user(db, user_token=token)
+    user = get_user_from_token(request, db)
     return {
         "success": True,
         "data": user.get_schemas().get_info()
+    }
+
+
+@app.post("/api/order")
+async def api_order_post(request: Request, order: schemas.OrderPost, db: Session = Depends(get_db)):
+    user = get_user_from_token(request, db)
+
+    try:
+        order_create = schemas.OrderCreate(
+            order_type=order.order_type,
+            order_text=order.order_text,
+            order_status=order.order_status,
+            customer_id=user.id
+        )
+    except ValidationError as e:
+        return JSONResponse({'status': False, 'error': 'Validation error', 'errors': e.errors()}, status_code=401)
+
+    order = crud.create_order(db, order_create)
+    return {
+        "success": True,
+        "data": {
+            "uuid": order.context['uuid']
+        }
     }
 
 

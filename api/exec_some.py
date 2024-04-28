@@ -19,7 +19,10 @@ def get_db():
         db.close()
 
 db = next(get_db())
-token = ''
 
-user = crud.get_user(db, user_token=token)
-user.get_schemas().get_info()
+order = schemas.OrderCreate(
+    order_type='call',
+    order_text='some text',
+    customer_id=1
+)
+crud.create_order(db, order)
