@@ -107,3 +107,15 @@ class User(UserBase):
             is_active=self.is_active,
             is_company=self.is_company
         )
+
+class OrderGet(OrderPost):
+    customer: UserInfo
+    employee: Optional[UserInfo]
+
+
+class OrderList(BaseModel):
+    success: bool = True
+    orders: List[OrderGet] = []
+
+    def append(self, item: OrderGet):
+        self.orders.append(item)

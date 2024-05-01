@@ -20,9 +20,11 @@ def get_db():
 
 db = next(get_db())
 
-order = schemas.OrderCreate(
-    order_type='call',
-    order_text='some text',
-    customer_id=1
-)
-crud.create_order(db, order)
+# order = schemas.OrderCreate(
+#     order_type='call',
+#     order_text='some text',
+#     customer_id=1
+# )
+# crud.create_order(db, order)
+response = crud.get_order_list(db, user_id=1)
+print(response)
