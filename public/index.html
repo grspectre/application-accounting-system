@@ -47,6 +47,51 @@
                 <div>
                   Добро пожаловать, <span x-text="userData.display_name"></span>.
                   <a href="#" @click.prevent="logout()">выйти</a>
+
+                  <!-- add order form-->
+                  <form id="order-add" class="w-full max-w-lg" method="post" action="/api/order/form" @submit.prevent="createOrder">
+                    <div class="flex flex-wrap -mx-3 mb-6">
+                      <!-- type -->
+                      <div class="w-full md:w-full px-3">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="order-type">
+                          Тип заявки
+                        </label>
+                        <div class="relative">
+                          <select name="order_type" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="order-type">
+                            <template x-for="item in dictionaries['order_types']">
+                              <option :value="item.type" x-text="item.value"></option>
+                            </template>
+                          </select>
+                          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- text -->
+                      <div class="w-full md:w-full px-3">
+                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="order-text">
+                          Текст заявки
+                        </label>
+                        <textarea name="order_text" id="order-text" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Напишите что вам необходимо..."></textarea>
+                      </div>
+                      <div class="w-full md:w-full px-3">
+                        <button type="submit" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                          Отправить
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                  <!-- order list -->
+                  <template x-if="orderList !== null">
+                    <div>
+                      <template x-for="order in orderList">
+                        <div>
+                          <span x-text="order.customer.display_name"></span>
+                          <span x-text="order.order_text"></span>
+                        </div>
+                      </template>
+                    </div>
+                  </template>
                 </div>
               </template>
               <template x-if="!authorized">
