@@ -86,12 +86,20 @@ async def api_order_post(request: Request, order: schemas.OrderPost, db: Session
         return JSONResponse({'status': False, 'error': 'Validation error', 'errors': e.errors()}, status_code=401)
 
     order = crud.create_order(db, order_create)
-    return {
+    return JSONResponse({
         "success": True,
         "data": {
             "uuid": order.context['uuid']
         }
-    }
+    })
+
+
+@app.get("/api/order/list")
+async def api_order_post(request: Request, db: Session = Depends(get_db)):
+    user = get_user_from_token(request, db)
+
+    orders = crud.get_order_list(db, user_id=user.id)
+    return orders
 
 
 @app.get("/api/ping")
