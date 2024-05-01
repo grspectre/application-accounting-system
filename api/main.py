@@ -67,7 +67,16 @@ async def api_user(request: Request, db: Session = Depends(get_db)):
     user = get_user_from_token(request, db)
     return {
         "success": True,
-        "data": user.get_schemas().get_info()
+        "data": user.get_schemas().get_info(),
+        "dictionaries": schemas.StaticDictionary.all(),
+    }
+
+
+@app.get("/api/dictionary/all")
+async def api_dictionary_all():
+    return {
+        "success": True,
+        "dictionaries": schemas.StaticDictionary.all(),
     }
 
 

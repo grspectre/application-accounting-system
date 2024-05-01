@@ -4,6 +4,38 @@ from pydantic import BaseModel, Field, field_validator
 from typing import List, Dict, Optional
 
 
+class StaticDictionary:
+    __dictionaries: Dict = {
+        "order_types": (
+            {"type": "call", "value": "Звонок"}, 
+            {"type": "chat", "value": "Чат"}, 
+            {"type": "visit", "value": "Визит"},
+        ),
+        "order_statuses": (
+            {"type": "new", "value": "Новая",}, 
+            {"type": "processed", "value": "Обработанная",}, 
+            {"type": "in_progress", "value": "В процессе",}, 
+            {"type": "declined", "value": "Отклонённая",},
+        ),
+    }
+
+    @classmethod
+    def get_types(cls, key: str) -> List:
+        if key not in cls.__dictionaries:
+            return []
+        return [item["type"] for item in cls.__dictionaries[key]]
+
+    @classmethod
+    def get(cls, key: str) -> List:
+        if key not in cls.__dictionaries:
+            return []
+        return cls.__dictionaries[key]
+
+    @classmethod
+    def all(cls):
+        return cls.__dictionaries
+
+
 class BaseOrder(BaseModel):
     order_type: str = Field(default=None, description="Order type")
     order_status: str = Field(default="new", description="Order status")
