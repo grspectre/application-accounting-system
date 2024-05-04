@@ -11,11 +11,11 @@ def get_user(db: Session, user_token: Optional[str] = None, email: Optional[str]
         return None
     query = db.query(models.User)
     if email is not None:
-        query.filter(models.User.email == email)
+        query = query.filter(models.User.email == email)
     if user_token is not None:
-        query.filter(models.User.hashed_password == user_token)
+        query = query.filter(models.User.hashed_password == user_token)
     if user_id is not None:
-        query.filter(models.User.id == user_id)
+        query = query.filter(models.User.id == user_id)
     return query.first()
 
 
@@ -48,7 +48,7 @@ def create_order(db: Session, order: schemas.OrderCreate):
 
 def get_order_list(db: Session, user_id: int):
     query = db.query(models.Order)
-    query.filter(or_(models.Order.customer_id == user_id, models.Order.employee_id == user_id))
+    query = query.filter(or_(models.Order.customer_id == user_id, models.Order.employee_id == user_id))
     response = query.all()
     users_cache = {}
     orders = schemas.OrderList()
