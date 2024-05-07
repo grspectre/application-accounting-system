@@ -105,15 +105,15 @@ document.addEventListener('alpine:init', () => {
                 } else {
                     this.userData = JSON.parse(userData.value);
                 }
-            }
 
-            // getting dictionaries
-            axios.get(Util.getAPIBaseUrl('dictionary/all'), Util.getRequestParams(accessToken)).then(response => {
-                if (response.data.success) {
-                    this.dictionaries = response.data.dictionaries;
-                }
-            });
-            this.getOrdersList();
+                // getting dictionaries
+                axios.get(Util.getAPIBaseUrl('dictionary/all'), Util.getRequestParams(accessToken)).then(response => {
+                    if (response.data.success) {
+                        this.dictionaries = response.data.dictionaries;
+                    }
+                });
+                this.getOrdersList();
+            }
         },
 
         async getOrdersList() {
