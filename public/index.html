@@ -1,122 +1,189 @@
 <!DOCTYPE html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Application Accounting Service</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
-    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="/css/app.css">
-    <link rel="icon" href="/img/fav/favicon.ico" type="image/x-icon">
-  </head>
-  <body class="dark:bg-gray-100">
-    <div class="container dark:bg-gray-900 container-xl mx-auto px-4 h-screen">
-      <nav class="bg-white border-gray-200 dark:bg-gray-900">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-          <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
-              <img src="/img/logo-k1.png" class="h-8" alt="Команда №1" />
-              <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Команда №1</span>
-          </a>
-          <button data-collapse-toggle="navbar-default" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-default" aria-expanded="false">
-              <span class="sr-only">Open main menu</span>
-              <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-              </svg>
-          </button>
-          <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-            <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-              <li>
-                <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Home</a>
-              </li>
-            </ul>
+<html lang="ru" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Application Accounting Service</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://yastatic.net/s3/passport-sdk/autofill/v1/sdk-suggest-with-polyfills-latest.js"></script>
+  <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="icon" href="/img/fav/favicon.ico" type="image/x-icon">
+</head>
+
+<body class="bg-green-100 dark:bg-gray-900">
+
+  <nav class="bg-white rounded-lg dark:bg-gray-800">
+    <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <img src="/img/logo-k1.png" class="h-8" alt="Команда №1" />
+        <span class="self-center text-lg sm:text-2xl font-semibold whitespace-nowrap dark:text-white">Команда №1</span>
+      </a>
+      <div x-data="auth_block">
+        <template x-if="!authorized">
+          <div
+            class="block py-2 px-3 text-gray-900 rounded font-medium hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+            <a id="yandex-oauth" :href="baseUrl">Вход</a>
           </div>
-        </div>
-      </nav>
+        </template>
 
+        <template x-if="authorized">
+          <div
+            class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">
+            <a href="#" @click.prevent="logout()">Выйти</a>
+          </div>
+        </template>
+      </div>
+  </nav>
+
+  <div class="container h-screen mx-auto">
+    <div
+      class="container bg-white h-96 shadow-2xl bg-opacity-60 rounded-lg dark:bg-white dark:bg-opacity-5 mx-auto mt-4 px-2 sm:mt-10 sm:px-4 overflow-auto">
+      <div class="pb-2 px-2 p-2 sm:pb-8 sm:p-4 sm:px-4 ">
+        <h1 class="text-xl text-center sm:text-2xl font-medium dark:text-gray-400 pb-2 sm:pb-4">Welcome to Application
+          Accounting Service</h1>
+        <p class="text-sm sm:text-xl text-left leading-normal sm:leading-relaxed  dark:text-gray-400 ">
+          Мы сделали эту систему, чтобы лучше обслуживать вас.<br>
+          Вот некоторые ключевые функции, которые вы можете тут использовать:<br>
+          - Простой способ принимать заявки от вас<br>
+          - Эффективная обработка заявок ответственными сотрудниками в зависимости от их типа (например, телефонная
+          консультация или выезд на ремонт)<br>
+          - Возможность легко управлять статусами и другими атрибутами заявок<br>
+          Создание такой системы поможет нам быть ближе к вам, предоставляя быстрое и качественное обслуживание для
+          вашей
+          техники.<br>
+        </p>
+      </div>
+
+    </div>
+
+    <div class="container bg-white bg-opacity-60 h-64 sm:h-96 rounded-lg shadow-2xl dark:bg-white dark:bg-opacity-5 container-xl mx-auto px-2 mt-4 mb-2 sm:px-4 sm:mt-10 ">
       <!-- main block -->
-      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 dark:text-gray-400">
-        <main role="main" class="w-full h-full flex-grow p-3 overflow-auto">
-          <div>
-            <h1 class="text-2xl">Welcome to Application Accounting Service</h1>
-            <div x-data="auth_block">
-              <template x-if="authorized && userData">
-                <div>
-                  Добро пожаловать, <span x-text="userData.display_name"></span>.
-                  <a href="#" @click.prevent="logout()">выйти</a>
+      <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-2 sm:p-4 dark:text-gray-400">
 
-                  <!-- add order form-->
-                  <form id="order-add" class="w-full max-w-lg" method="post" action="/api/order/form" @submit.prevent="createOrder">
-                    <div class="flex flex-wrap -mx-3 mb-6">
-                      <!-- type -->
-                      <div class="w-full md:w-full px-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="order-type">
-                          Тип заявки
-                        </label>
-                        <div class="relative">
-                          <select name="order_type" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="order-type">
-                            <template x-for="item in dictionaries['order_types']">
-                              <option :value="item.type" x-text="item.value"></option>
-                            </template>
-                          </select>
-                          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- text -->
-                      <div class="w-full md:w-full px-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="order-text">
-                          Текст заявки
-                        </label>
-                        <textarea name="order_text" id="order-text" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Напишите что вам необходимо..."></textarea>
-                      </div>
-                      <div class="w-full md:w-full px-3">
-                        <button type="submit" class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
-                          Отправить
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                  <!-- order list -->
-                  <template x-if="orderList !== null">
-                    <div>
-                      <template x-for="order in orderList">
-                        <div>
-                          <span x-text="order.customer.display_name"></span>
-                          <span x-text="order.order_text"></span>
-                        </div>
-                      </template>
-                    </div>
-                  </template>
+        <main role="main" class="w-full h-full flex-grow  overflow-auto">
+          <div x-data="auth_block">
+            <template x-if="authorized && userData">
+              <!-- Block 1. request form -->
+              <div class="container bg-white shadow-2xl bg-opacity-60 rounded-lg h-48 sm:h-96 dark:bg-white dark:bg-opacity-5 container-xl mx-auto px-2 mt-2 mb-2 sm:px-4 sm:mt-10 sm:mb-6">
+
+                <div class="text-center text-xs sm:text-xl  mb-2 pt-1 sm:mb-6 sm:pt-3 dark:text-gray-400">Добро
+                  пожаловать, <span x-text="userData.display_name"></span>
                 </div>
-              </template>
-              <template x-if="!authorized">
-                <a id="yandex-oauth" :href="baseUrl">Токен от Яндекса!</a>
-              </template>
-            </div>
+
+                <!-- add order form-->
+                <form id="order-add" class="container md:container md:mx-auto p-2 px-10 sm:px-36" method="post" action="/api/order/form" @submit.prevent="createOrder">
+                  <div class="flex flex-wrap flex-auto -mx-3 mb-6">
+                    <!-- type -->
+                    <div class=" w-full px-2 ms:px-5 ">
+                      <label class="block uppercase tracking-wide text-gray-700 text-xs sm:text-sm   mb-2 dark:text-gray-400" for="order-type">
+                        Тип заявки
+                      </label>
+                      <div class="relative">
+                        <select name="order_type" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="order-type">
+                          <template x-for="item in dictionaries['order_types']">
+                            <option :value="item.type" x-text="item.value"></option>
+                          </template>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                          <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- text -->
+                    <div class="w-auto sm:w-full px-2 ms:px-5">
+                      <label class="block uppercase tracking-wide text-gray-700 text-xs sm:text-sm pt-4 mb-2 dark:text-gray-400" for="order-text">
+                        Текст заявки
+                      </label>
+                      <textarea name="order_text" id="order-text" rows="4" class="block p-2.5 mb-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Напишите что вам необходимо..."></textarea>
+                    </div>
+                    <div class="flex flex-col items-center w-full md:w-full ">
+                      <button type="submit" class="inline-flex  px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                        Отправить
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
+                <!-- Block 2. request history -->
+                <div class="text-xl text-center sm:text-2xl font-medium dark:text-gray-400 pb-2 pt-2 sm:pb-4 sm:pt-4">
+                  История заявок
+                </div>
+                <template x-if="orderList !== null">
+                  <div class="flex flex-col">
+                    <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                      <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                        <div class="overflow-hidden">
+                          <table class="min-w-full text-left text-sm font-light text-surface dark:text-white">
+                            <thead class="border-b border-neutral-200 font-medium dark:border-white/10">
+                              <tr>
+                                <th scope="col" class="px-6 py-4"></th>
+                                <th scope="col" class="px-6 py-4">Имя</th>
+                                <th scope="col" class="px-6 py-4">Текст заявки</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <template x-for="order in orderList">
+                                <tr class="border-b border-neutral-200 dark:border-white/10">
+                                  <td class="whitespace-nowrap px-6 py-4"><span
+                                      x-text="order.customer.display_name"></span></td>
+                                  <td class="whitespace-nowrap px-6 py-4"><span x-text="order.order_text"></span></td>
+                                </tr>
+                              </template>
+                              <template x-for="order in orderList">
+                                <tr class="border-b border-neutral-200 dark:border-white/10">
+                                  <td class="whitespace-nowrap px-6 py-4"><span
+                                      x-text="order.customer.display_name"></span></td>
+                                  <td class="whitespace-nowrap px-6 py-4"><span x-text="order.order_text">rrr</span>
+                                  </td>
+                                </tr>
+                              </template>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </template>
+            <!-- Block 3. login form -->
+            <template x-if="!authorized">
+              <div class="flex flex-col items-center pb-1 px-2 p-2 dark:text-gray-400 ">
+                <h1 class="text-base text-center font-medium sm:text-2xl pb-1 sm:pb-4">Оставте заявку и мы поможем
+                  вам</h1>
+                <p class="text-sm text-center sm:text-xl leading-normal sm:leading-relaxed mb-2 sm:mb-10 ">
+                  Для авторизации мы используем Яндекс ID. <br>
+                  Яндекс ID - это единый аккаунт для входа во все сервисы Яндекса,<br>
+                  а также на сайты и в приложения, которые поддерживают такую авторизацию, как наш сайт.
+                </p>
+                <button type="submit"
+                  class="block mb-4 w-48 mt-4 rounded-lg bg-blue-500 text-neutral-50 shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] hover:bg-blue-600 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-blue-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] active:bg-blue-700 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out focus:outline-none focus:ring-0 dark:focus:ring-blue-900 dark:bg-blue-700 dark:hover:bg-blue-800">
+                  <a id="yandex-oauth" :href="baseUrl">Вход</a></button>
+              </div>
+            </template>
           </div>
         </main>
       </div>
-
-      <!-- footer -->
-      <footer class="mt-auto">
-        <div class="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-          <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-            © 2024 <a href="#" class="hover:underline">Команда №1</a>. Just for fun.
-          </span>
-          <ul class="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
-            <li>
-                <a href="#" class="hover:underline me-4 md:me-6">About</a>
-            </li>
-          </ul>
-        </div>
-      </footer>
     </div>
+  </div>
+    <!-- footer -->
+    <footer class="w-full  mt-6 bg-white rounded-lg dark:bg-gray-800">
+      <div class="w-full mx-auto max-w-screen-2xl p-4 md:flex md:items-center md:justify-between">
+        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+          © 2024 <a href="#" class="hover:underline">Команда №1</a>. Just for fun.
+        </span>
+      </div>
+    </footer>
+    <script src="/js/app.js"></script>
+</body>
 
-	<script src="/js/app.js"></script>
-  </body>
 </html>

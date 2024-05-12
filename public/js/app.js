@@ -89,7 +89,7 @@ document.addEventListener('alpine:init', () => {
         async init() {
             let accessToken = await Util.getAccessToken();
             if (accessToken === null) { // we don't have access_token
-                let url = 'https://pir.dfmb.ru/api/verify/yandex';
+                let url = 'https://'+window.location.host+'/api/verify/yandex';
                 let clientId = '0d90fed9dc3346b188a9d2e95c85a4cb'
                 this.baseUrl = 'https://oauth.yandex.ru/authorize?response_type=code&redirect_uri=' + url + '&client_id=' + clientId;
                 this.authorized = false;
@@ -105,15 +105,15 @@ document.addEventListener('alpine:init', () => {
                 } else {
                     this.userData = JSON.parse(userData.value);
                 }
-            }
 
-            // getting dictionaries
-            axios.get(Util.getAPIBaseUrl('dictionary/all'), Util.getRequestParams(accessToken)).then(response => {
-                if (response.data.success) {
-                    this.dictionaries = response.data.dictionaries;
-                }
-            });
-            this.getOrdersList();
+                // getting dictionaries
+                axios.get(Util.getAPIBaseUrl('dictionary/all'), Util.getRequestParams(accessToken)).then(response => {
+                    if (response.data.success) {
+                        this.dictionaries = response.data.dictionaries;
+                    }
+                });
+                this.getOrdersList();
+            }
         },
 
         async getOrdersList() {
