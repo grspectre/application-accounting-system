@@ -83,6 +83,7 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('auth_block', () => ({
         baseUrl: '#',
         authorized: true,
+        isStudent: false,
         userData: null,
         dictionaries: [],
         orderList: null,
@@ -105,6 +106,8 @@ document.addEventListener('alpine:init', () => {
                 } else {
                     this.userData = JSON.parse(userData.value);
                 }
+
+                this.isStudent = this.userData.email.includes('utmn.ru')
 
                 // getting dictionaries
                 axios.get(Util.getAPIBaseUrl('dictionary/all'), Util.getRequestParams(accessToken)).then(response => {
@@ -138,6 +141,15 @@ document.addEventListener('alpine:init', () => {
             await window.db.keyValue.where({key: "user_data"}).delete();
             await window.db.keyValue.where({key: "user_token"}).delete();
             document.location.reload();
+        },
+
+        async getLocalLoginUrl() {
+            let userToken = await window.db.keyValue.where({key: "user_token"}).first();
+            if (!Util.isUndefined(userToken)) {
+                let data = JSON.parse(userToken.value);
+                return `http://127.0.0.1:8000/index.html?refresh_token=${data['refresh_token']}&access_token=${data['access_token']}`;
+            }
+            return null;
         }
     }));
 });
