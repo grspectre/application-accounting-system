@@ -19,7 +19,7 @@
 <body class="bg-green-100 dark:bg-gray-900 flex flex-col min-h-screen ">
 
 
-  <nav class="bg-white w-full dark:bg-gray-800">
+  <nav class="bg-white rounded-lg dark:bg-gray-800">
     <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-2 sm:p-4">
       <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
         <img src="/img/logo-k1.png" class="h-8" alt="Команда №1" />
@@ -62,7 +62,6 @@
           техники.<br>
         </p>
       </div>
-
     </div-->
 
   <main role="main" class="container mx-auto">
@@ -70,8 +69,7 @@
       <template x-if="authorized && userData">
         <!-- Block 1. request form -->
         <div class="container">
-          <div
-            class="container bg-white bg-opacity-40 shadow-2xl rounded-lg mt-4 sm:mt-6 px-1 pt-2 sm:px-3 dark:bg-opacity-5 ">
+          <div class="container bg-white bg-opacity-40 shadow-2xl rounded-lg mt-4 sm:mt-6 px-1 pt-2 sm:px-3 dark:bg-opacity-5">
             <div class="text-center text-xs sm:text-2xl  mb-2 pt-1 sm:mb-6 sm:pt-4 dark:text-gray-400 ">Добро
               пожаловать, <span x-text="userData.display_name"></span>
             </div>
@@ -166,8 +164,7 @@
       </template>
       <!-- Block 3. login form -->
       <template x-if="!authorized">
-        <div
-          class="container bg-white bg-opacity-40 shadow-2xl rounded-lg mt-4 sm:mt-6 px-1 pt-2 sm:px-3 dark:bg-opacity-5">
+        <div class="container bg-white bg-opacity-40 shadow-2xl rounded-lg mt-4 sm:mt-6 px-1 pt-2 sm:px-3 dark:bg-opacity-5">
           <div class="flex flex-col items-center pb-4 px-2 p-2 dark:text-gray-400">
             <h1 class="text-base text-center font-medium sm:text-2xl pb-1 sm:pb-4 sm:pt-4">Оставте заявку и мы поможем
               вам</h1>
@@ -191,7 +188,7 @@
 </body>
 <!-- footer -->
 <footer class="bg-white mt-auto rounded-lg dark:bg-gray-800">
-  <div class="w-full pb-4 mx-auto max-w-screen-2xl p-4 md:flex md:items-center md:justify-between">
+  <div class="w-full pb-4 mx-auto max-w-screen-2xl p-2 sm:p-4 md:flex md:items-center md:justify-between">
     <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
       © 2024 <a href="#" class="hover:underline">Команда №1</a>. Just for fun.
     </span>
