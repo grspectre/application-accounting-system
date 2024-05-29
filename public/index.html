@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" class="dark">
+<html lang="ru" class="dark ">
 
 <head>
   <meta charset="UTF-8">
@@ -16,13 +16,14 @@
   <link rel="icon" href="/img/fav/favicon.ico" type="image/x-icon">
 </head>
 
-<body class="bg-green-100 dark:bg-gray-900">
+<body class="bg-green-100 dark:bg-gray-900 flex flex-col min-h-screen ">
+
 
   <nav class="bg-white rounded-lg dark:bg-gray-800">
-    <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
+    <div class="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-2 sm:p-4">
       <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
         <img src="/img/logo-k1.png" class="h-8" alt="Команда №1" />
-        <span class="self-center text-lg sm:text-2xl font-semibold whitespace-nowrap dark:text-white">Команда №1</span>
+        <span class="self-center text-lg sm:text-2xl font-semibold dark:text-white">Команда №1</span>
       </a>
       <div x-data="auth_block">
         <template x-if="!authorized">
@@ -41,7 +42,7 @@
       </div>
   </nav>
 
-  <!-- div class="container h-screen mx-auto">
+  <!--div class="container h-screen mx-auto--">
     <div
       class="container bg-white h-96 shadow-2xl bg-opacity-60 rounded-lg dark:bg-white dark:bg-opacity-5 mx-auto mt-4 px-2 sm:mt-10 sm:px-4">
       <div class="pb-2 px-2 p-2 sm:pb-8 sm:p-4 sm:px-4 ">
@@ -59,16 +60,15 @@
           техники.<br>
         </p>
       </div>
+    </div-->
 
-    </div -->
-
-    <main role="main" class="w-full flex-grow">
-      <div x-data="auth_block">
-        <template x-if="authorized && userData">
-          <!-- Block 1. request form -->
-          <div class="container">
-
-            <div class="text-center text-xs sm:text-xl  mb-2 pt-1 sm:mb-6 sm:pt-3 dark:text-gray-400">Добро
+  <main role="main" class="container mx-auto">
+    <div x-data="auth_block">
+      <template x-if="authorized && userData">
+        <!-- Block 1. request form -->
+        <div class="container">
+          <div class="container bg-white bg-opacity-40 shadow-2xl rounded-lg mt-4 sm:mt-6 px-1 pt-2 sm:px-3 dark:bg-opacity-5">
+            <div class="text-center text-xs sm:text-2xl  mb-2 pt-1 sm:mb-6 sm:pt-4 dark:text-gray-400 ">Добро
               пожаловать, <span x-text="userData.display_name"></span>
             </div>
 
@@ -80,15 +80,20 @@
             </template>
 
             <!-- add order form-->
-            <form id="order-add" class="container md:container md:mx-auto p-2 px-10 sm:px-36" method="post" action="/api/order/form" @submit.prevent="createOrder">
+            <form id="order-add" class="container md:container md:mx-auto p-2 px-10 sm:px-36" method="post"
+              action="/api/order/form" @submit.prevent="createOrder">
               <div class="flex flex-wrap flex-auto -mx-3 mb-6">
                 <!-- type -->
                 <div class=" w-full px-2 ms:px-5 ">
-                  <label class="block uppercase tracking-wide text-gray-700 text-xs sm:text-sm   mb-2 dark:text-gray-400" for="order-type">
+                  <label
+                    class="block uppercase tracking-wide text-gray-700 text-xs sm:text-sm   mb-2 dark:text-gray-400"
+                    for="order-type">
                     Тип заявки
                   </label>
                   <div class="relative">
-                    <select name="order_type" class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="order-type">
+                    <select name="order_type"
+                      class="block appearance-none w-full bg-gray-200 border border-gray-200  text-xs sm:text-sm text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="order-type">
                       <template x-for="item in dictionaries['order_types']">
                         <option :value="item.type" x-text="item.value"></option>
                       </template>
@@ -102,58 +107,64 @@
                 </div>
                 <!-- text -->
                 <div class="w-auto sm:w-full px-2 ms:px-5">
-                  <label class="block uppercase tracking-wide text-gray-700 text-xs sm:text-sm pt-4 mb-2 dark:text-gray-400" for="order-text">
+                  <label
+                    class="block uppercase tracking-wide text-gray-700 text-xs sm:text-sm pt-4 mb-2 dark:text-gray-400"
+                    for="order-text">
                     Текст заявки
                   </label>
-                  <textarea name="order_text" id="order-text" rows="4" class="block p-2.5 mb-4 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  <textarea name="order_text" id="order-text" rows="4"
+                    class="block p-2.5 mb-4 w-full  text-xs sm:text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Напишите что вам необходимо..."></textarea>
                 </div>
-                <div class="flex flex-col items-center w-full md:w-full ">
-                  <button type="submit" class="inline-flex  px-5 py-2.5 text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
+                <div class="flex flex-col items-center w-full md:w-full sm:mb-10 sm:mt-10 ">
+                  <button type="submit"
+                    class="inline-flex  px-5 py-2.5 text-xs sm:text-sm font-medium text-center text-white bg-blue-500 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800">
                     Отправить
                   </button>
                 </div>
               </div>
             </form>
-
-            <!-- Block 2. request history -->
-            <div class="text-xl text-center sm:text-2xl font-medium dark:text-gray-400 pb-2 pt-2 sm:pb-4 sm:pt-4">
-              История заявок
-            </div>
-            <template x-if="orderList !== null">
-              <div class="flex flex-col">
-                <div class="">
-                  <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                    <div>
-                      <table class="min-w-full text-left text-sm font-light text-surface dark:text-white">
-                        <thead class="border-b border-neutral-200 font-medium dark:border-white/10">
-                          <tr>
-                            <th scope="col" class="px-6 py-4"></th>
-                            <th scope="col" class="px-6 py-4">Имя</th>
-                            <th scope="col" class="px-6 py-4">Текст заявки</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <template x-for="order in orderList">
-                            <tr class="border-b border-neutral-200 dark:border-white/10">
-                              <td class="whitespace-nowrap px-6 py-4"><span
-                                  x-text="order.customer.display_name"></span></td>
-                              <td class="whitespace-nowrap px-6 py-4"><span x-text="order.order_text"></span></td>
+          </div>
+          <!-- Block 2. request history -->
+          <template x-if="orderList !== null">
+            <div
+              class="container bg-white bg-opacity-40 shadow-2xl rounded-lg mt-4 sm:mt-6 px-1 pt-2 sm:px-3 dark:bg-opacity-5">
+              <div class="text-xs text-center sm:text-2xl font-medium dark:text-gray-400 pb-2 pt-2 sm:pb-4 sm:pt-4">
+                История заявок
+                <div class="flex flex-col mb-4">
+                  <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                      <div>
+                        <table class="min-w-full text-left  text-xs sm:text-sm font-light text-surface dark:text-white">
+                          <thead class="border-b border-neutral-200 font-medium dark:border-white/10">
+                            <tr>
+                              <th scope="col" class="px-6 py-4">Имя</th>
+                              <th scope="col" class="px-6 py-4">Текст заявки</th>
                             </tr>
-                          </template>
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            <template x-for="order in orderList">
+                              <tr class="border-b  border-neutral-200 dark:border-white/10">
+                                <td class="px-2 py-2 sm:px-6 sm:py-4 sm:whitespace-nowrap"><span x-text="order.customer.display_name"></span></td>
+                                <td class="px-2 py-2 sm:px-6 sm:py-4 "><span x-text="order.order_text"></span></td>
+                              </tr>
+                            </template>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </template>
-          </div>
-        </template>
-        <!-- Block 3. login form -->
-        <template x-if="!authorized">
-          <div class="flex flex-col items-center pb-1 px-2 p-2 dark:text-gray-400 ">
-            <h1 class="text-base text-center font-medium sm:text-2xl pb-1 sm:pb-4">Оставте заявку и мы поможем
+            </div>
+          </template>
+        </div>
+      </template>
+      <!-- Block 3. login form -->
+      <template x-if="!authorized">
+        <div class="container bg-white bg-opacity-40 shadow-2xl rounded-lg mt-4 sm:mt-6 px-1 pt-2 sm:px-3 dark:bg-opacity-5">
+          <div class="flex flex-col items-center pb-4 px-2 p-2 dark:text-gray-400">
+            <h1 class="text-base text-center font-medium sm:text-2xl pb-1 sm:pb-4 sm:pt-4">Оставте заявку и мы поможем
               вам</h1>
             <p class="text-sm text-center sm:text-xl leading-normal sm:leading-relaxed mb-2 sm:mb-10 ">
               Для авторизации мы используем Яндекс ID. <br>
@@ -161,22 +172,25 @@
               а также на сайты и в приложения, которые поддерживают такую авторизацию, как наш сайт.
             </p>
             <button type="submit"
-              class="block mb-4 w-48 mt-4 rounded-lg bg-blue-500 text-neutral-50 shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] hover:bg-blue-600 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-blue-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] active:bg-blue-700 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out focus:outline-none focus:ring-0 dark:focus:ring-blue-900 dark:bg-blue-700 dark:hover:bg-blue-800">
+              class="block mb-4 w-48 mt-4 sm:mb-10 sm:mt-10 rounded-lg bg-blue-500 text-neutral-50 shadow-[0_4px_9px_-4px_rgba(51,45,45,0.7)] hover:bg-blue-600 hover:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] focus:bg-blue-800 focus:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] active:bg-blue-700 active:shadow-[0_8px_9px_-4px_rgba(51,45,45,0.2),0_4px_18px_0_rgba(51,45,45,0.1)] px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal transition duration-150 ease-in-out focus:outline-none focus:ring-0 dark:focus:ring-blue-900 dark:bg-blue-700 dark:hover:bg-blue-800">
               <a id="yandex-oauth" :href="baseUrl">Вход</a></button>
           </div>
-        </template>
-      </div>
-    </main>
+        </div>
+      </template>
+    </div>
+  </main>
 
-    <!-- footer -->
-    <footer class="w-full  mt-6 bg-white rounded-lg dark:bg-gray-800">
-      <div class="w-full mx-auto max-w-screen-2xl p-4 md:flex md:items-center md:justify-between">
-        <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
-          © 2024 <a href="#" class="hover:underline">Команда №1</a>. Just for fun.
-        </span>
-      </div>
-    </footer>
-    <script src="/js/app.js"></script>
+
+  </div>
+  <script src="/js/app.js"></script>
 </body>
+<!-- footer -->
+<footer class="bg-white mt-auto rounded-lg dark:bg-gray-800">
+  <div class="w-full pb-4 mx-auto max-w-screen-2xl p-2 sm:p-4 md:flex md:items-center md:justify-between">
+    <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
+      © 2024 <a href="#" class="hover:underline">Команда №1</a>. Just for fun.
+    </span>
+  </div>
+</footer>
 
 </html>
