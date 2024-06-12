@@ -34,6 +34,7 @@ class Order(Base):
     order_text = Column(Text)
     order_status = Column(String(50), index=True)
     context = Column(JSONB, default=[])
+    order_history = Column(JSONB, default=[])
     created_at = Column(TIMESTAMP, default=datetime.datetime.now)
     updated_at = Column(TIMESTAMP, default=datetime.datetime.now, onupdate=datetime.datetime.now)
     deleted_at = Column(TIMESTAMP, nullable=True)

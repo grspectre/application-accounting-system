@@ -74,6 +74,7 @@ class Order(BaseOrder):
     employee_id: Optional[int]
     order_text: str
     context: Dict
+    order_history: Dict
     created_at: datetime.datetime
     updated_at: Optional[datetime.datetime]
     deleted_at: Optional[datetime.datetime]
