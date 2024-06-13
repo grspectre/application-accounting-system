@@ -2,6 +2,7 @@ import datetime
 
 from pydantic import BaseModel, Field, field_validator
 from typing import List, Dict, Optional
+from enum import Enum
 
 
 class StaticDictionary:
@@ -17,6 +18,10 @@ class StaticDictionary:
             {"type": "in_progress", "value": "В процессе",}, 
             {"type": "declined", "value": "Отклонённая",},
         ),
+        "user_roles": (
+            {"type": "manager", "value": "Менеджер",}, 
+            {"type": "admin", "value": "Администратор",}, 
+        )
     }
 
     @classmethod
@@ -81,6 +86,16 @@ class Order(BaseOrder):
 
     class Config:
         from_attributes = True
+
+
+class ActionEnum(str, Enum):
+    add = 'add'
+    remove = 'remove'
+
+
+class UserRole(BaseModel):
+    role: str
+    action: ActionEnum = ActionEnum.remove
 
 
 class UserBase(BaseModel):

@@ -72,6 +72,21 @@ async def api_user(request: Request, db: Session = Depends(get_db)):
     }
 
 
+@app.put("/api/user/role")
+async def api_user_role(request: Request, role: schemas.UserRole, db: Session = Depends(get_db)):
+    user = get_user_from_token(request, db)
+    available_roles = schemas.StaticDictionary.get_types("user_roles")
+    if role.role not in available_roles:
+        return {
+            "success": False,
+            "message": "Role {} not available".format(role.role)
+        }
+    crud.change_role(db, user, role)
+    return {
+        "success": True
+    }
+
+
 @app.get("/api/dictionary/all")
 async def api_dictionary_all():
     return {

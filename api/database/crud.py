@@ -1,7 +1,7 @@
 import uuid
 from typing import Optional
 from sqlalchemy.orm import Session
-from sqlalchemy import or_
+from sqlalchemy import or_, select
 
 from . import models, schemas
 
@@ -30,6 +30,21 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def change_role(db: Session, user: models.User, role: schemas.UserRole):
+    available = schemas.StaticDictionary.get_types('user_roles')
+    if role.role not in available:
+        return user
+    roles = user.roles[:]
+    if role.action == schemas.ActionEnum.add and role.role not in roles:
+        roles.append(role.role)
+    if role.action == schemas.ActionEnum.remove and role.role in roles:
+        roles.remove(role.role)
+    user.roles = roles
+    db.commit()
+    db.refresh(user)
+    return user
 
 
 def create_order(db: Session, order: schemas.OrderCreate):

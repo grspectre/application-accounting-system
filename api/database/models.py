@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, TIMESTAMP
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, session
 import datetime
 from .database import Base
 from .schemas import User as UserSchema
@@ -23,6 +23,7 @@ class User(Base):
     def get_schemas(self):
         data = self.__dict__
         return UserSchema(**data)
+
 
 class Order(Base):
     __tablename__ = "order"
